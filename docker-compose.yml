@@ -1,0 +1,115 @@
+services:
+  db:
+    platform: linux/arm64
+    image: mariadb:latest
+    hostname: db-neural
+    container_name: db-neural
+    restart: on-failure
+    environment:
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MARIADB_DATABASE: ${DB_NAME}
+      MARIADB_USER: ${DB_USER}
+      MARIADB_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "3301:3306"
+    networks:
+      - db
+    volumes:
+      - db:/var/lib/mysql
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
+      start_period: 10s
+      interval: 5s
+      timeout: 3s
+      retries: 3
+
+  cache:
+    platform: linux/amd64
+    image: redis:latest
+    hostname: cache-neural
+    container_name: cache-neural
+    restart: on-failure
+    ports:
+      - "6301:6379"
+    networks:
+      - cache
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      start_period: 10s
+      interval: 5s
+      timeout: 3s
+      retries: 3
+
+  llm:
+    image: ollama/ollama:latest
+    platform: linux/arm64  # required on M1/M2 (slow)
+    hostname: llm-neural
+    container_name: llm-neural
+    ports:
+      - "11434:11434"
+    networks:
+      - llm
+    volumes:
+      - llm:/root/.ollama
+
+
+  server:
+    platform: linux/arm64
+    hostname: server-neural
+    container_name: server-neural
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: dockerfile
+      target: local
+      args:
+        ENV: local
+        WORK_DIR: /workdir
+        INSTALL_DIR: /opt/install
+        PW_DIR: /pwdir
+    ports:
+      - "8001:8000"
+    volumes:
+      - .:/workdir
+    networks:
+      - db
+      - cache
+      - llm
+      - server
+      - backend
+    depends_on:
+      db:
+        condition: service_healthy
+      cache:
+        condition: service_healthy
+      llm:
+        condition: service_started
+    command: >
+      bash -c "uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload"
+
+
+networks:
+  db:
+    name: db-neural
+    driver: bridge
+  cache:
+    name: cache-neural
+    driver: bridge
+  llm:
+    name: llm-neural
+    driver: bridge
+  server:
+    name: server-neural
+    driver: bridge
+  backend:
+    name: backend
+    driver: bridge
+
+volumes:
+  db:
+    name: db-neural
+  llm:
+    name: llm-neural
