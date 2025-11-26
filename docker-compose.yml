@@ -55,7 +55,6 @@ services:
     volumes:
       - llm:/root/.ollama
 
-
   server:
     platform: linux/arm64
     hostname: server-neural
