@@ -7,7 +7,7 @@ from src.core.success import Success
 from src.data.schema.run import RunOutSchema, RunSchema
 from src.service.agent import AgentService, get_agent_service
 
-router = APIRouter(prefix="/agent", tags=["agent"])
+router = APIRouter(prefix="/agent", tags=["Agent"])
 
 
 @router.post(path="/run")

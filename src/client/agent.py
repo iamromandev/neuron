@@ -14,11 +14,11 @@ class AgentClient(metaclass=SingletonMeta):
     def __init__(self, llm_base_url: HttpUrl) -> None:
         if self._initialized:
             return
-
-        model = OpenAIChatModel(
-            model_name="getrobi/lexa-1.5b",
-            provider=OllamaProvider(base_url=serialize(llm_base_url))
-        )
+        config = {
+            "model_name": "getrobi/lexa-1.5b",
+            "provider": OllamaProvider(base_url=serialize(llm_base_url))
+        }
+        model = OpenAIChatModel(**config)
         self._agent: Agent = Agent(
             model=model,
             system_prompt="Answer concisely.",
