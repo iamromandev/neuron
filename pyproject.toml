@@ -1,5 +1,5 @@
 [project]
-name = "neural"
+name = "neuron"
 version = "0.0.1"
 description = "A fastapi+pydantic-ai server for neural network inference."
 authors = [

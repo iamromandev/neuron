@@ -12,8 +12,9 @@ async def get_cache_client(
         cache_url=settings.cache_url
     )
 
+
 async def get_agent_client(
 ) -> AsyncGenerator[AgentClient]:
     yield AgentClient(
-
+        llm_base_url=settings.llm_base_url
     )

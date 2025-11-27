@@ -2,8 +2,8 @@ services:
   db:
     platform: linux/arm64
     image: mariadb:latest
-    hostname: db-neural
-    container_name: db-neural
+    hostname: db-neuron
+    container_name: db-neuron
     restart: on-failure
     environment:
       MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
@@ -29,13 +29,15 @@ services:
   cache:
     platform: linux/amd64
     image: redis:latest
-    hostname: cache-neural
-    container_name: cache-neural
+    hostname: cache-neuron
+    container_name: cache-neuron
     restart: on-failure
     ports:
-      - "6301:6379"
+      - "6371:6379"
     networks:
       - cache
+    volumes:
+      - cache:/data
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
       start_period: 10s
@@ -45,11 +47,11 @@ services:
 
   llm:
     image: ollama/ollama:latest
-    platform: linux/arm64  # required on M1/M2 (slow)
-    hostname: llm-neural
-    container_name: llm-neural
+    platform: linux/arm64
+    hostname: llm-neuron
+    container_name: llm-neuron
     ports:
-      - "11434:11434"
+      - "11431:11434"
     networks:
       - llm
     volumes:
@@ -57,8 +59,8 @@ services:
 
   server:
     platform: linux/arm64
-    hostname: server-neural
-    container_name: server-neural
+    hostname: server-neuron
+    container_name: server-neuron
     restart: unless-stopped
     build:
       context: .
@@ -92,16 +94,16 @@ services:
 
 networks:
   db:
-    name: db-neural
+    name: db-neuron
     driver: bridge
   cache:
-    name: cache-neural
+    name: cache-neuron
     driver: bridge
   llm:
-    name: llm-neural
+    name: llm-neuron
     driver: bridge
   server:
-    name: server-neural
+    name: server-neuron
     driver: bridge
   backend:
     name: backend
@@ -109,6 +111,8 @@ networks:
 
 volumes:
   db:
-    name: db-neural
+    name: db-neuron
+  cache:
+    name: cache-neuron
   llm:
-    name: llm-neural
+    name: llm-neuron

@@ -2,7 +2,7 @@ from functools import cached_property
 from typing import Annotated
 from urllib.parse import quote_plus
 
-from pydantic import Field, RedisDsn
+from pydantic import Field, HttpUrl, RedisDsn
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from .type import Env
@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     env: Annotated[Env, Field(description="Application environment")]
     debug: Annotated[bool, Field(description="Enable debug mode")]
     # db
-    db_connection: Annotated[str, Field(description="Database connection type")]
+    db_schema: Annotated[str, Field(description="Database connection type")]
     db_host: Annotated[str, Field(description="Database host")]
     db_port: Annotated[int, Field(description="Database port")]
     db_name: Annotated[str, Field(description="Database name")]
@@ -26,6 +26,8 @@ class Settings(BaseSettings):
     cache_port: Annotated[int, Field(description="Cache port")]
     cache_user: Annotated[str, Field(description="Cache user")]
     cache_password: Annotated[str, Field(description="Cache password")]
+    # llm
+    llm_base_url: Annotated[HttpUrl, Field(description="Base URL for the LLM provider")]
 
     model_config = SettingsConfigDict(
         env_file=".env",
