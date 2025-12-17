@@ -1,5 +1,7 @@
+import asyncio
 from contextlib import asynccontextmanager
 
+import uvloop
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -18,7 +20,7 @@ async def lifespan(fa: FastAPI):
     yield  # startup complete
     # any shutdown code here
 
-
+asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 app = FastAPI(
     title="Agent App",
     version=get_app_version(),

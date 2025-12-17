@@ -6,7 +6,7 @@ _subrouters = [
     _health_router,
 ]
 
-router = APIRouter(prefix="/health", tags=["Health"])
+router = APIRouter()
 
 for subrouter in _subrouters:
     router.include_router(subrouter)

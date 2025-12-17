@@ -8,14 +8,19 @@ authors = [
 readme = "README.md"
 requires-python = "==3.13.5"
 dependencies = [
+    ### core ###
     "toml>=0.10.2",
     "loguru>=0.7.3",
     "fastapi[all]>=0.121.1",
+    ### database ###
     "tortoise-orm[accel,aiomysql]>=0.25.1",
     "aerich[mysql,toml]>=0.9.2",
+    ### cache ###
     "redis>=7.0.1",
-    "aiohttp>=3.13.2",
+    ### ai ###
     "pydantic-ai[examples]>=1.22.0",
+    ### other ###
+    "aiohttp>=3.13.2",
 ]
 
 [dependency-groups]

@@ -7,10 +7,13 @@ from src.core.success import Success
 from src.data.schema.run import RunOutSchema, RunSchema
 from src.service.agent import AgentService, get_agent_service
 
-router = APIRouter(prefix="/agent", tags=["Agent"])
+router = APIRouter()
 
 
-@router.post(path="/run")
+@router.post(
+    path="/run",
+    response_model=Success[RunOutSchema]
+)
 async def run(
     service: Annotated[AgentService, Depends(get_agent_service)],
     payload: Annotated[RunSchema, Body(...)],

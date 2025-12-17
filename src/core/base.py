@@ -27,6 +27,10 @@ class Base(models.Model):
         self.deleted_at = datetime.now(UTC)
         return await self.save()
 
+    @property
+    def _tag(self) -> str:
+        return self.__class__.__name__
+
     @classmethod
     async def get_active(cls: type[_ModelT]) -> queryset.QuerySet[_ModelT]:
         return cls.filter(deleted_at__isnull=True)
@@ -383,6 +387,6 @@ class BaseService:
     def __init__(self) -> None:
         logger.debug(f"{self._tag}|__init__()")
 
-    @cached_property
+    @property
     def _tag(self) -> str:
         return self.__class__.__name__

@@ -208,6 +208,7 @@ class ErrorType(BaseEnum):
     EMAIL_SEND_FAILED = "email_send_failed"
     NOTIFICATION_ERROR = "notification_error"
 
+
 class Action(StrEnum):
     # --- CRUD / Resource management ---
     CREATE = "create"
@@ -272,46 +273,47 @@ class Action(StrEnum):
         except ValueError:
             return None
 
+
 class State(StrEnum):
     # --- Initialization / Scheduling ---
-    NEW = "new"                  # Just created, not started yet
-    PENDING = "pending"          # Waiting for dependency or resource
-    QUEUED = "queued"            # In queue for execution
-    SCHEDULED = "scheduled"      # Planned for future run
+    NEW = "new"  # Just created, not started yet
+    PENDING = "pending"  # Waiting for dependency or resource
+    QUEUED = "queued"  # In queue for execution
+    SCHEDULED = "scheduled"  # Planned for future run
 
     # --- Startup / Preparation ---
-    INITIALIZING = "initializing" # Allocating or loading resources
-    STARTING = "starting"         # Beginning execution
+    INITIALIZING = "initializing"  # Allocating or loading resources
+    STARTING = "starting"  # Beginning execution
 
     # --- Execution / Processing ---
-    RUNNING = "running"           # Actively executing
-    VALIDATING = "validating"     # Checking input or results
-    TRANSFORMING = "transforming" # Performing data transformation
+    RUNNING = "running"  # Actively executing
+    VALIDATING = "validating"  # Checking input or results
+    TRANSFORMING = "transforming"  # Performing data transformation
 
     # --- Control / Flow ---
-    WAITING = "waiting"           # Waiting for event, signal, or resource
-    BLOCKED = "blocked"           # Cannot proceed due to external issue
-    DEFERRED = "deferred"         # Postponed due to unmet conditions
-    RETRYING = "retrying"         # Reattempt after failure
-    SUSPENDED = "suspended"       # Paused manually or automatically
-    RESUMED = "resumed"           # Resumed from suspension
-    SKIPPED = "skipped"           # Intentionally not executed
+    WAITING = "waiting"  # Waiting for event, signal, or resource
+    BLOCKED = "blocked"  # Cannot proceed due to external issue
+    DEFERRED = "deferred"  # Postponed due to unmet conditions
+    RETRYING = "retrying"  # Reattempt after failure
+    SUSPENDED = "suspended"  # Paused manually or automatically
+    RESUMED = "resumed"  # Resumed from suspension
+    SKIPPED = "skipped"  # Intentionally not executed
 
     # --- Failure / Interruption ---
-    TIMEOUT = "timeout"           # Exceeded time limit
-    FAILED = "failed"             # Execution failed
-    ABORTED = "aborted"           # Manually stopped mid-execution
-    CANCELED = "canceled"         # Canceled before starting
+    TIMEOUT = "timeout"  # Exceeded time limit
+    FAILED = "failed"  # Execution failed
+    ABORTED = "aborted"  # Manually stopped mid-execution
+    CANCELED = "canceled"  # Canceled before starting
 
     # --- Completion / Terminal ---
-    SUCCESS = "success"           # Completed successfully
-    PARTIAL_SUCCESS = "partial_success" # Some operations succeeded
-    COMPLETED = "completed"       # Finished, regardless of outcome
+    SUCCESS = "success"  # Completed successfully
+    PARTIAL_SUCCESS = "partial_success"  # Some operations succeeded
+    COMPLETED = "completed"  # Finished, regardless of outcome
 
     # --- Lifecycle / Post-execution ---
-    STALE = "stale"               # Outdated or no longer relevant
-    EXPIRED = "expired"           # Reached end of validity
-    ARCHIVED = "archived"         # Moved to long-term storage
+    STALE = "stale"  # Outdated or no longer relevant
+    EXPIRED = "expired"  # Reached end of validity
+    ARCHIVED = "archived"  # Moved to long-term storage
 
     @classmethod
     def value_of(cls, value: str) -> Self | None:
@@ -499,3 +501,42 @@ class SafeFileResponse(FileResponse):
             else:
                 safe_headers[k] = v
         super().__init__(*args, headers=safe_headers, **kwargs)
+
+
+class OwnerType(StrEnum):
+    USER = "user"
+    AGENT = "agent"
+    SYSTEM = "system"
+
+
+class RunType(StrEnum):
+    CHAT = "chat"
+    COMPLETION = "completion"
+    AGENT = "agent"
+    BATCH = "batch"
+    SYSTEM = "system"
+    EVAL = "eval"
+
+
+class RunStatus(StrEnum):
+    PENDING = "pending"
+    RUNNING = "running"
+    SUCCESS = "success"
+    FAILED = "failed"
+    TIMEOUT = "timeout"
+
+
+class ModelStatus(StrEnum):
+    ACTIVE = "active"
+    INACTIVE = "inactive"
+    DEPRECATED = "deprecated"
+    ERROR = "error"
+
+
+class ModelCapability(StrEnum):
+    STREAMING = "streaming"
+    JSON = "json"
+    TOOLS = "tools"
+    VISION = "vision"
+    AUDIO = "audio"
+    EMBEDDINGS = "embeddings"

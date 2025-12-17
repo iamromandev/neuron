@@ -1,4 +1,4 @@
-target-version = "py312"
+target-version = "py313"
 line-length = 120
 
 exclude = [
@@ -26,9 +26,19 @@ select = [
 ]
 
 [lint.extend-per-file-ignores]
+# core
 "*/__init__.py" = ["F401", "B008"]
 "*/core/*.py" = ["UP046", "UP047"]
 "*/migration/*" = ["E501"]
 "*/constant.py" = ["E501"]
 "*/base.py" = ["UP046"]
+### data ###
+"*/data/model/__init__.py" = ["I001"]
+### lib ###
+"*/lib/*.py" = ["B904"]
+# schema
+"*/schema/*.py" = ["UP045"]
+# repo
+"*/repo/*.py" = ["B904"]
+# service
 "*/service/*.py" = ["B904"]
