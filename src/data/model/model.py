@@ -4,7 +4,7 @@ from typing import Any
 from tortoise import fields
 
 from src.core.base import Base
-from src.core.type import ModelCapability, ModelStatus
+from src.core.type import CostUnit, ModelCapability, ModelStatus
 from src.data.model.provider import Provider
 
 
@@ -13,15 +13,18 @@ class Model(Base):
         model_name="model.Provider",
         related_name="models",
     )
-    status: ModelStatus = fields.CharEnumField(
-        enum_type=ModelStatus,
-        default=ModelStatus.ACTIVE
+    statuses: list[ModelStatus] = fields.JSONField(default=list)
+    capabilities: list[ModelCapability] = fields.JSONField(default=list)
+    cost_unit: CostUnit = fields.CharEnumField(
+        enum_type=CostUnit,
+        default=CostUnit.PER_1K
     )
+
     name: str = fields.CharField(max_length=64)
+    version: str | None = fields.CharField(max_length=32, null=True)
 
     total_token_limit: int = fields.IntField()
     output_token_limit: int | None = fields.IntField(null=True)
-    cost_unit: int = fields.IntField(default=1000)
     input_cost: Decimal | None = fields.DecimalField(
         max_digits=10,
         decimal_places=6,
@@ -33,7 +36,7 @@ class Model(Base):
         null=True,
     )
 
-    capabilities: list[ModelCapability] = fields.JSONField(default=list)
+    is_default: bool = fields.BooleanField(default=False)
 
     meta: dict[str, Any] | list[Any] | None = fields.JSONField(null=True)
 
@@ -43,4 +46,4 @@ class Model(Base):
         table_description = "Model"
 
     def __str__(self) -> str:
-        return f"[{self._tag}:__str__(): name {self.name}, slug {self.slug}]"
+        return f"[{self._tag}:__str__(): name {self.name}, version {self.version}]"
