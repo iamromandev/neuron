@@ -4,8 +4,8 @@ from typing import Any
 from tortoise import fields
 
 from src.core.base import Base
-from src.core.type import CostUnit, ModelCapability, ModelStatus
 from src.data.model.provider import Provider
+from src.data.type import CostUnit, ModelCapability, ModelStatus
 
 
 class Model(Base):
@@ -44,6 +44,7 @@ class Model(Base):
         ordering = ["-created_at"]
         table = "model"
         table_description = "Model"
+        unique_together = ("provider", "name", "version")
 
     def __str__(self) -> str:
         return f"[{self._tag}:__str__(): name {self.name}, version {self.version}]"

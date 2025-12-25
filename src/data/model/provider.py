@@ -4,7 +4,7 @@ from pydantic import HttpUrl
 from tortoise import fields
 
 from src.core.base import Base
-from src.core.type import ProviderStatus
+from src.data.type import ProviderStatus
 from src.data.validator import UrlValidator
 
 
